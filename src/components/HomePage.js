@@ -5,14 +5,22 @@ import DropdownInput from './DropdownInput'
 class HomePage extends Component {
   render() {
     return (
-      <DropdownInput
-        options={testDropdownProps}
-      />
+      <>
+        <DropdownInput
+          options={quarters}
+          labelText="Select Quarter"
+          name="Quarter"
+        />
+        <DropdownInput
+          options={subjects}
+          labelText="Select Subject"
+          name="Subject"
+        />
+      </>
     );
   }
 }
 
 export default HomePage;
-
-
-const testDropdownProps = [{value: 'Spring'}, {value: 'Fall'}, {value: 'Winter'}, {value: 'Summer'}];
+const subjects = [{value: 'Math'}, {value: 'History'}, {value: 'Computer Science'}];
+const quarters = [ {value: 'Fall'}, {value: 'Winter'}, {value: 'Spring'}, {value: 'Summer'}];
