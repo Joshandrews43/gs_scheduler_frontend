@@ -10,27 +10,13 @@ const InputContainer = styled.div`
 `;
 
 class DropdownInput extends Component {
-  constructor(props) {
-    super(props);
-
-    this.state = {
-      selected: this.props.name
-    }
-
-    this.handleChange = this.handleChange.bind(this);
-  }
-
-  handleChange(event) {
-    this.setState({selected: event.target.value})
-  }
-
   renderMenuItems() {
     return this.props.options.map(option => (
       <MenuItem
-        value={option.value}
-        key={option.value}
+        value={option}
+        key={option}
       >
-        {option.value}
+        {option}
       </MenuItem>
     ));
   }
@@ -38,13 +24,13 @@ class DropdownInput extends Component {
   render() {
     return(
       <InputContainer>
-        <label for={this.props.name}>{this.props.labelText}</label>
+        <label htmlFor={this.props.name}>{this.props.labelText}</label>
         <Select
           autoWidth
           name={this.props.name}
           autoWidth={true}
-          value={this.state.selected}
-          onChange={this.handleChange}
+          value={this.props.value}
+          onChange={this.props.handleChange}
         >
           {this.renderMenuItems()}
         </Select>
