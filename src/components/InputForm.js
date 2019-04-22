@@ -16,6 +16,7 @@ class InputForm extends Component {
     this.state = {
       subject: 'Subject',
       quarter: 'Quarter',
+      course: 'Course' ,
     }
 
     this.handleChange = this.handleChange.bind(this);
@@ -44,6 +45,13 @@ class InputForm extends Component {
           name="subject"
           handleChange={this.handleChange}
         />
+        <DropdownInput
+        options = {courses}
+        value = {this.state.course}
+        labelText="Select Course"
+        name = "course" 
+        handleChange = {this.props.onCourseSelected}
+        />
       </InputFormContainer>
     );
   }
@@ -56,3 +64,4 @@ const getSubjectSymbols = () => {
 
 
 const quarters = ['Fall', 'Winter', 'Spring', 'Summer'];
+const courses = ['Math 8', 'CS48', 'CS16'] ;
