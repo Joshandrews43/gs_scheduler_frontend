@@ -1,12 +1,18 @@
 import React, { Component } from 'react';
 import styled from 'styled-components';
-import InputForm from './InputForm'
+import InputForm from './InputForm' ;
+import SelectedCourses from './SelectedCourses' ;
 
 class HomePage extends Component {
+  state = {
+    selectedCourses: []
+  }
 
   onCourseSelected = (e) => {
     const courseName = e.target.value;
-    console.log(courseName);
+    this.setState({
+      selectedCourses: this.state.selectedCourses.append(courseName)
+    })
   }
 
   render() {
@@ -14,6 +20,10 @@ class HomePage extends Component {
       <>
         <InputForm 
           onCourseSelected={this.onCourseSelected}
+        />
+
+        <SelectedCourses
+          courses={this.state.selectedCourses}
         />
       </>
     );
