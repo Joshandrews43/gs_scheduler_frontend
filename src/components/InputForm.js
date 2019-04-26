@@ -27,6 +27,17 @@ class InputForm extends Component {
     this.setState({[name]: value})
   }
 
+  onCourseSelected = (e) => {
+    const courseName = e.target.value;
+    var courseObject;
+    courses.map(course => {
+      if(courseName === course.name){
+        courseObject = course;
+      }
+    });
+    this.props.onCourseSelected(courseObject);
+  }
+
   render() {
     return(
       <InputFormContainer>
@@ -44,9 +55,24 @@ class InputForm extends Component {
           name="subject"
           handleChange={this.handleChange}
         />
+        <DropdownInput
+          options={getOptions()}
+          value={''}
+          labelText="Select Course"
+          name="course"
+          handleChange={this.onCourseSelected}
+        />
       </InputFormContainer>
     );
   }
+}
+
+const courses = [{name: 'test1', time: '8pm'}, {name: 'test2', time: '9pm'}]
+
+function getOptions() {
+  return courses.map(course => {
+    return course.name;
+  })
 }
 
 export default InputForm;
