@@ -16,6 +16,7 @@ class InputForm extends Component {
     this.state = {
       subject: 'Subject',
       quarter: 'Quarter',
+      course: 'Course' ,
     }
 
     this.handleChange = this.handleChange.bind(this);
