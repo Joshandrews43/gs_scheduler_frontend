@@ -28,7 +28,6 @@ class DropdownInput extends Component {
         <Select
           autoWidth
           name={this.props.name}
-          autoWidth={true}
           value={this.props.value}
           onChange={this.props.handleChange}
         >
