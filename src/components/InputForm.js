@@ -11,20 +11,14 @@ const InputFormContainer = styled.div`
 `;
 
 class InputForm extends Component {
-  constructor(props) {
-    super(props);
-
-    this.state = {
+    state = {
       subject: '',
       quarter: '',
+      course: '',
       buttonDisabled: true,
     }
 
-    this.onSubmit = this.onSubmit.bind(this);
-    this.handleChange = this.handleChange.bind(this);
-  }
-
-  handleChange(event) {
+  handleChange = (event) => {
     const name = event.target.name
     const value = event.target.value
     this.setState({[name]: value}, () => {
@@ -34,9 +28,20 @@ class InputForm extends Component {
 
   }
 
-  onSubmit() {
+  onSubmit = () => {
     // do something with state here.
     console.log(this.state)
+  }
+
+  onCourseSelected = (e) => {
+    const courseName = e.target.value;
+    var courseObject;
+    courses.map(course => {
+      if(courseName === course.name){
+        courseObject = course;
+      }
+    });
+    this.props.onCourseSelected(courseObject);
   }
 
   render() {
@@ -56,6 +61,14 @@ class InputForm extends Component {
           name="subject"
           handleChange={this.handleChange}
         />
+        
+        <DropdownInput
+          options={getOptions()}
+          value={''}
+          labelText="Select Course"
+          name="course"
+          handleChange={this.onCourseSelected}
+        />
         <Button
           disabled={this.state.buttonDisabled}
           onClick={this.onSubmit}
@@ -64,6 +77,14 @@ class InputForm extends Component {
       </InputFormContainer>
     );
   }
+}
+
+const courses = [{name: 'test1', time: '8pm'}, {name: 'test2', time: '9pm'}]
+
+function getOptions() {
+  return courses.map(course => {
+    return course.name;
+  })
 }
 
 export default InputForm;
