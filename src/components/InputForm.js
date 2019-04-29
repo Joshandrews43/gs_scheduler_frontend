@@ -2,7 +2,8 @@ import React, {Component} from 'react';
 import styled from 'styled-components';
 import DropdownInput from './DropdownInput';
 import Button from './Button';
-const staticData = require('../assets/staticData.json');
+import * as staticData from '../assets/staticData.json';
+import * as courses from '../assets/spring2019.json';
 
 const InputFormContainer = styled.div`
   display: flex;
@@ -11,32 +12,51 @@ const InputFormContainer = styled.div`
 `;
 
 class InputForm extends Component {
-    state = {
-      subject: '',
-      quarter: '',
-      course: '',
-      buttonDisabled: true,
-    }
+  state = {
+    subject: '',
+    quarter: '',
+    selectedCourse: '',
+    buttonDisabled: true,
+    subjects: [],
+    quarters: [],
+    courses: [],
+  }
+
+  componentDidMount = () => {
+    this.setState({
+      subjects: getSubjects(),
+    });
+  }
 
   handleChange = (event) => {
     const name = event.target.name
     const value = event.target.value
+
     this.setState({[name]: value}, () => {
-      if (this.state.subject && this.state.quarter) this.setState({buttonDisabled: false});
+      if (this.state.subject) {
+        this.setState({
+          courseNames: getCourseNamesForSubject(this.state.subject),
+          courses: courses.default[this.state.subject].courses
+        });
+      }
     });
-
-
   }
 
-  onSubmit = () => {
-    // do something with state here.
-    console.log(this.state)
+  addCourse = () => {
+    console.log('adding course in inpit form');
+    const { selectedCourse } = this.state;
+    this.state.courses.map(course => {
+      if (course.courseID === selectedCourse) {
+        this.props.addCourse(course);
+      }
+    });
   }
 
   onCourseSelected = (e) => {
+    const { courses, subject } = this.state;
     const courseName = e.target.value;
     var courseObject;
-    courses.map(course => {
+    courses.default[subject].map(course => {
       if(courseName === course.name){
         courseObject = course;
       }
@@ -55,41 +75,38 @@ class InputForm extends Component {
           handleChange={this.handleChange}
         />
         <DropdownInput
-          options={getSubjectSymbols()}
+          options={this.state.subjects}
           value={this.state.subject}
           labelText="Select Subject"
           name="subject"
           handleChange={this.handleChange}
         />
-        
+
         <DropdownInput
-          options={getOptions()}
-          value={''}
+          options={this.state.courseNames}
+          value={this.state.selectedCourse}
           labelText="Select Course"
-          name="course"
-          handleChange={this.onCourseSelected}
+          name="selectedCourse"
+          handleChange={this.handleChange}
         />
         <Button
-          disabled={this.state.buttonDisabled}
-          onClick={this.onSubmit}
-          text="Generate Schedules"
+          disabled={false}
+          onClick={this.addCourse}
+          text="Add Course"
         />
       </InputFormContainer>
     );
   }
 }
 
-const courses = [{name: 'test1', time: '8pm'}, {name: 'test2', time: '9pm'}]
+export default InputForm;
 
-function getOptions() {
-  return courses.map(course => {
-    return course.name;
+const getCourseNamesForSubject = (subject) => {
+  return courses.default[subject].courses.map(course => {
+    return course.courseID;
   })
 }
 
-export default InputForm;
-
-
-const getSubjectSymbols = () => {
-  return staticData.subjects.map(subject => (subject.symbol));
+const getSubjects = () => {
+  return Object.keys(courses.default);
 }

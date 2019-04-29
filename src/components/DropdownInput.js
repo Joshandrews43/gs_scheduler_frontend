@@ -12,6 +12,11 @@ const InputContainer = styled.div`
 
 class DropdownInput extends Component {
   renderMenuItems() {
+    const { options } = this.props;
+    if (!options) {
+      return null;
+    }
+
     return this.props.options.map(option => (
       <MenuItem
         value={option}

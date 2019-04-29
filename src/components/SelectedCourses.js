@@ -1,21 +1,26 @@
 import React, {Component} from 'react';
 import styled from 'styled-components';
 
+import Close from '../assets/close.svg';
+
 const CoursesContainer = styled.div`
-    width: 300px;
-    float: right;
+  width: 300px;
+  float: right;
 `;
 
 const Course = styled.div`
-    width: 100%;
-    border: 1px solid black;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: calc(100% - 60px);
+  border: 1px solid black;
+  border-radius: 30px;
+  padding: 0 30px;
 `;
 
-const Delete = styled.div`
-    background-color: red;
-    float: right;
-    width: 20px;
-    height: 20px;
+const Delete = styled.img`
+  width: 15px;
+  height: 15px;
 `;
 
 class SelectedCourses extends Component {
@@ -23,22 +28,23 @@ class SelectedCourses extends Component {
         const { courses } = this.props;
         return courses.map(course => (
             <Course>
-                {this.formatCourse(course)}
-                <Delete
-                    onClick={() => this.props.deleteCourse(course)}
-                />
+              {this.formatCourse(course)}
+              <Delete
+                  src={Close}
+                  onClick={() => this.props.deleteCourse(course)}
+              />
             </Course>
-        )) 
+        ))
     }
 
     formatCourse = (course) => {
-        return course.name + " " + course.time;
+        return `${course.courseID}: ${course.fullTitle}`;
     }
 
     render(){
         return(
             <CoursesContainer>
-                {this.renderCourses()} 
+                {this.renderCourses()}
             </CoursesContainer>
         );
     }
