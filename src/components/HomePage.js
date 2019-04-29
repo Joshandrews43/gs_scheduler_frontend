@@ -17,11 +17,11 @@ class HomePage extends Component {
   }
 
   deleteCourse = (courseToDelete) => {
-    this.state.courses.map(course => {
+    const { selectedCourses } = this.state;
+    selectedCourses.map((course, index) => {
       if (courseToDelete === course) {
-        var arr1 = course.slice(0,courseToDelete) ;
-        var arr2 = course.slice(courseToDelete, course.length) ;
-        course = arr1.concact(arr2) ;
+        const newCourses = selectedCourses.slice(0, index).concat(selectedCourses.slice(index + 1, selectedCourses.length))
+        this.setState({ selectedCourses: newCourses });
       }
     })
   }
