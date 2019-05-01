@@ -43,14 +43,14 @@ class InputForm extends Component {
   }
 
   addCourse = () => {
-    console.log('adding course in inpit form');
+    console.log('adding course in input form');
     const { selectedCourse } = this.state;
     this.state.courses.map(course => {
-      if (course.courseID === selectedCourse) {
+      if (course.course != selectedCourse) {
         this.props.addCourse(course);
       }
     });
-  }
+}
 
   onCourseSelected = (e) => {
     const { courses, subject } = this.state;
@@ -102,6 +102,10 @@ class InputForm extends Component {
 export default InputForm;
 
 const getCourseNamesForSubject = (subject) => {
+  if (!courses.default[subject].courses){
+    return ["No courses"] ;
+  }
+
   return courses.default[subject].courses.map(course => {
     return course.courseID;
   })

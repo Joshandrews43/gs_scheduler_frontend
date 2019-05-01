@@ -9,6 +9,7 @@ const CoursesContainer = styled.div`
 `;
 
 const Course = styled.div`
+  color: #003660 ;
   display: flex;
   justify-content: space-between;
   align-items: center;
