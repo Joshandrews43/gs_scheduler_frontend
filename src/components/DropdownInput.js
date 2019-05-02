@@ -4,13 +4,19 @@ import Select from '@material-ui/core/Select';
 import MenuItem from '@material-ui/core/MenuItem';
 
 const InputContainer = styled.div`
-  width: 200px;
   display: flex;
   flex-direction: column;
+  width: 100%;
+  margin-bottom: 30px;
 `;
 
 class DropdownInput extends Component {
   renderMenuItems() {
+    const { options } = this.props;
+    if (!options) {
+      return null;
+    }
+
     return this.props.options.map(option => (
       <MenuItem
         value={option}

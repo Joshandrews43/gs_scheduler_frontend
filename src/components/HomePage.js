@@ -5,33 +5,35 @@ import SelectedCourses from './SelectedCourses' ;
 
 class HomePage extends Component {
   state = {
-    selectedCourses: [{name: "test", time: '8:00 - 9:00'}]
+    selectedCourses: []
   }
 
-  onCourseSelected = (course) => {
+  addCourse = (course) => {
     const { selectedCourses } = this.state;
-
     this.setState({
       selectedCourses: selectedCourses.concat(course)
     })
   }
 
   deleteCourse = (courseToDelete) => {
-    this.state.courses.map(course => {
+    const { selectedCourses } = this.state;
+    selectedCourses.map((course, index) => {
       if (courseToDelete === course) {
-        var arr1 = course.slice(0,courseToDelete) ;
-        var arr2 = course.slice(courseToDelete, course.length) ;
-        course = arr1.concact(arr2) ;
+        this.setState({
+          selectedCourses: selectedCourses.slice(0, index).concat(selectedCourses.slice(index + 1, selectedCourses.length))
+        });
       }
-    })
+    });
   }
+
+
 
   render() {
     const { selectedCourses } = this.state;
     return (
       <>
-        <InputForm 
-          onCourseSelected={this.onCourseSelected}
+        <InputForm
+          addCourse={this.addCourse}
         />
 
         <SelectedCourses
