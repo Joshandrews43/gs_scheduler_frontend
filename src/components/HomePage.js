@@ -2,10 +2,17 @@ import React, { Component } from 'react';
 import styled from 'styled-components';
 import InputForm from './InputForm' ;
 import SelectedCourses from './SelectedCourses' ;
-import GenerateButton from './GenerateButton';
+import Button from './Button';
+
+const GenerateButtonContainer = styled.div`
+  width: 300px;
+  margin: 0 auto;
+`;
 
 class HomePage extends Component {
 state = {
+    generateButtonDisabled: false,
+    showGenerateButton: true,
     selectedCourses: []
   }
   addCourse = (course) => {
@@ -26,6 +33,12 @@ state = {
     });
   }
 
+  onGenerateClicked = () => {
+    this.setState({
+      generateButtonDisabled: true,
+      showGenerateButton: false,
+     })
+  }
 
 
   render() {
@@ -35,8 +48,15 @@ state = {
         <InputForm
           addCourse={this.addCourse}
         />
-        <GenerateButton />
 
+        <GenerateButtonContainer>
+        <Button
+          disabled={this.state.generateButtonDisabled}
+          onClick={this.onGenerateClicked}
+          showButton={this.state.showGenerateButton}
+          text="Generate Schedules"
+        />
+        </GenerateButtonContainer>
         <SelectedCourses
           courses={selectedCourses}
           deleteCourse={this.deleteCourse}

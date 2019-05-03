@@ -92,6 +92,7 @@ class InputForm extends Component {
         />
         <Button
           disabled={false}
+          showButton={true}
           onClick={this.addCourse}
           text="Add Course"
         />

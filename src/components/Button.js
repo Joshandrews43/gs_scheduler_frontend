@@ -3,6 +3,7 @@ import styled from 'styled-components';
 const GradientButton = styled.button`
   background-color: #003660;
 	transition: 0.5s;
+  display: ${props => props.showButton ? 'block' : 'none'}
 	background-size: 200% auto;
   height: 50px;
   width: 100%;
@@ -23,6 +24,7 @@ function Button(props) {
     <GradientButton
       disabled={props.disabled}
       onClick={props.onClick}
+      showButton={props.showButton}
     >
       {props.text}
     </GradientButton>

@@ -6,8 +6,7 @@ import Button from './Button';
 
 const GenerateButtonContainer = styled.div`
   display: ${props=> props.showButton ? 'block': 'none'};
-  margin-left: auto;
-  margin-right: auto;
+  margin: 0 auto;
   flex-direction: column;
   width: 300px;
 `;
@@ -15,10 +14,11 @@ const GenerateButtonContainer = styled.div`
 
 
 class GenerateButton extends Component {
-  state ={
+  state = {
     buttonDisabled: true,
     showButton: true,
   }
+
   onClick = () => {
      this.setState({
        showButton: false,
@@ -28,12 +28,14 @@ class GenerateButton extends Component {
   render(){
     return(
 
-      <GenerateButtonContainer showButton={this.state.showButton}>
-      <Button
-        disabled={false}
-        onClick={this.onClick}
-        text="Generate Schedule"
-      />
+      <GenerateButtonContainer
+        showButton={this.state.showButton}
+      >
+        <Button
+          disabled={false}
+          onClick={this.onClick}
+          text="Generate Schedule"
+        />
       </GenerateButtonContainer>
     )
   }
