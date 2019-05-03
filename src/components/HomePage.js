@@ -2,12 +2,12 @@ import React, { Component } from 'react';
 import styled from 'styled-components';
 import InputForm from './InputForm' ;
 import SelectedCourses from './SelectedCourses' ;
+import GenerateButton from './GenerateButton';
 
 class HomePage extends Component {
-  state = {
+state = {
     selectedCourses: []
   }
-
   addCourse = (course) => {
     const { selectedCourses } = this.state;
     this.setState({
@@ -35,6 +35,7 @@ class HomePage extends Component {
         <InputForm
           addCourse={this.addCourse}
         />
+        <GenerateButton />
 
         <SelectedCourses
           courses={selectedCourses}

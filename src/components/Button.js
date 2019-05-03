@@ -1,6 +1,5 @@
 import React, {Component} from 'react';
 import styled from 'styled-components';
-
 const GradientButton = styled.button`
   background-color: #003660;
 	transition: 0.5s;
@@ -17,6 +16,7 @@ const GradientButton = styled.button`
     background-position: top left;
   }
 `;
+
 
 function Button(props) {
   return (
