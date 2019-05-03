@@ -5,12 +5,13 @@ import Button from './Button';
 
 
 const GenerateButtonContainer = styled.div`
-  //display: ${props=> props.showButton ? 'block': 'none'};
+  display: ${props=> props.showButton ? 'block': 'none'};
   margin-left: auto;
   margin-right: auto;
   flex-direction: column;
   width: 300px;
 `;
+
 
 
 class GenerateButton extends Component {
@@ -27,10 +28,9 @@ class GenerateButton extends Component {
   render(){
     return(
 
-      <GenerateButtonContainer>
+      <GenerateButtonContainer showButton={this.state.showButton}>
       <Button
         disabled={false}
-        showButton={this.state.showButton}
         onClick={this.onClick}
         text="Generate Schedule"
       />
