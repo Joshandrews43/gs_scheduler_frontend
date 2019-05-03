@@ -4,6 +4,8 @@ import InputForm from './InputForm' ;
 import SelectedCourses from './SelectedCourses' ;
 import Title from './Title' ;
 
+
+
 const BStyle = styled.div`
 background-image: linear-gradient(to top, #e6e9f0 0%, #eef1f5 100%);
 position: fixed ;
@@ -52,7 +54,7 @@ class HomePage extends Component {
           courses={selectedCourses}
           deleteCourse={this.deleteCourse}
         />
-      </BStyle>
+      </BStyle> 
     );
   }
 }

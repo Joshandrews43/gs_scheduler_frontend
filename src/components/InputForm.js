@@ -16,7 +16,7 @@ class InputForm extends Component {
     subject: '',
     quarter: '',
     selectedCourse: '',
-    buttonDisabled: true,
+    buttonDisabled: false, //i changed the value of this from true to false so thats its not disabled as default state
     subjects: [],
     quarters: [],
     courses: [],
@@ -90,7 +90,7 @@ class InputForm extends Component {
           handleChange={this.handleChange}
         />
         <Button
-          disabled={false}
+          disabled={this.state.buttonDisabled} //now disabled will be set to whatever the state of buttonDisabled is set to
           onClick={this.addCourse}
           text="Add Course"
         />
@@ -103,6 +103,7 @@ export default InputForm;
 
 const getCourseNamesForSubject = (subject) => {
   if (!courses.default[subject].courses){
+    Button.setState(Button.state.buttonDisabled=true) ; //if its just the No Courses tab in the array, this is supposed to disable the button.
     return ["No courses"] ;
   }
 
