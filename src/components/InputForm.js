@@ -21,12 +21,14 @@ class InputForm extends Component {
     quarters: [],
     courses: [],
   }
+
   getCourseNamesForSubject = (subject) => { //put function inside 
     if (!courses.default[subject].courses){
-      this.setState({this.state.buttonDisabled: true}) ; //if its just the No Courses tab in the array, this is supposed to disable the button.
+      this.setState({buttonDisabled: true}) ; //if its just the No Courses tab in the array, this is supposed to disable the button.
       return ["No courses"] ;
     }
   
+    this.setState({ buttonDisabled: false });
     return courses.default[subject].courses.map(course => {
       return course.courseID;
     })
