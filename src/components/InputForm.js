@@ -23,7 +23,7 @@ class InputForm extends Component {
   }
   getCourseNamesForSubject = (subject) => { //put function inside 
     if (!courses.default[subject].courses){
-      this.setState(this.state.buttonDisabled=true) ; //if its just the No Courses tab in the array, this is supposed to disable the button.
+      this.setState({this.state.buttonDisabled: true}) ; //if its just the No Courses tab in the array, this is supposed to disable the button.
       return ["No courses"] ;
     }
   
@@ -45,7 +45,7 @@ class InputForm extends Component {
     this.setState({[name]: value}, () => {
       if (this.state.subject) {
         this.setState({
-          courseNames: getCourseNamesForSubject(this.state.subject),
+          courseNames: this.getCourseNamesForSubject(this.state.subject),
           courses: courses.default[this.state.subject].courses
         });
       }
