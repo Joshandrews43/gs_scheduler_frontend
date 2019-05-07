@@ -3,6 +3,7 @@ import styled from 'styled-components';
 import InputForm from './InputForm' ;
 import SelectedCourses from './SelectedCourses' ;
 import Title from './Title' ;
+import ScheduleTable from './ScheduleTable' ;
 
 
 
@@ -54,6 +55,7 @@ class HomePage extends Component {
           courses={selectedCourses}
           deleteCourse={this.deleteCourse}
         />
+        <ScheduleTable/>
       </BStyle> 
     );
   }
