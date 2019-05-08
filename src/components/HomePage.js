@@ -2,6 +2,21 @@ import React, { Component } from 'react';
 import styled from 'styled-components';
 import InputForm from './InputForm' ;
 import SelectedCourses from './SelectedCourses' ;
+import Title from './Title' ;
+import ScheduleTable from './ScheduleTable' ;
+
+import '../styles/reset.css';
+import '../styles/global.css';
+
+const Container = styled.div`
+  background-image: linear-gradient(to top, #e6e9f0 0%, #eef1f5 100%);
+  height: 100vh;
+`;
+
+const MiddleContainer = styled.div`
+  width: 100%;
+  justify-content: space-evenly;
+`;
 
 class HomePage extends Component {
   state = {
@@ -31,16 +46,20 @@ class HomePage extends Component {
   render() {
     const { selectedCourses } = this.state;
     return (
-      <>
-        <InputForm
-          addCourse={this.addCourse}
-        />
+      <Container className="flex-column flex-full-center">
+        <Title/>
+        <MiddleContainer className="flex-row">
+          <InputForm
+            addCourse={this.addCourse}
+          />
+          <ScheduleTable/>
 
-        <SelectedCourses
-          courses={selectedCourses}
-          deleteCourse={this.deleteCourse}
-        />
-      </>
+          <SelectedCourses
+            courses={selectedCourses}
+            deleteCourse={this.deleteCourse}
+          />
+        </MiddleContainer>
+      </Container> 
     );
   }
 }
