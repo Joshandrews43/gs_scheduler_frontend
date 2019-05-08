@@ -3,7 +3,8 @@ import styled from "styled-components" ;
 import { Tab } from '@material-ui/core';
 
 const TableContainer = styled.div `
-border: 1px solid black l;
+width: 500px,
+border: 1px solid black;
 `;
 
 class ScheduleTable extends Component{
@@ -11,6 +12,7 @@ class ScheduleTable extends Component{
         return(
             <TableContainer>
             <table align="center">
+            <caption>Schedule</caption>
             <tr>
                 <th>Time</th>
                 <th>Monday</th>

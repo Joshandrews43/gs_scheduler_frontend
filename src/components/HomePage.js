@@ -5,18 +5,19 @@ import SelectedCourses from './SelectedCourses' ;
 import Title from './Title' ;
 import ScheduleTable from './ScheduleTable' ;
 
+import '../styles/reset.css';
+import '../styles/global.css';
 
-
-const BStyle = styled.div`
-background-image: linear-gradient(to top, #e6e9f0 0%, #eef1f5 100%);
-position: fixed ;
-top: 0 ;
-left: 0 ;
-bottom: 0 ;
-right: 0 ;
-min-width: 100% ;
-min-height: 100% ;
+const Container = styled.div`
+  background-image: linear-gradient(to top, #e6e9f0 0%, #eef1f5 100%);
+  height: 100vh;
 `;
+
+const MiddleContainer = styled.div`
+  width: 100%;
+  justify-content: space-evenly;
+`;
+
 class HomePage extends Component {
   state = {
     selectedCourses: []
@@ -45,18 +46,20 @@ class HomePage extends Component {
   render() {
     const { selectedCourses } = this.state;
     return (
-      <BStyle>
+      <Container className="flex-column flex-full-center">
         <Title/>
-        <InputForm
-          addCourse={this.addCourse}
-        />
+        <MiddleContainer className="flex-row">
+          <InputForm
+            addCourse={this.addCourse}
+          />
+          <ScheduleTable/>
 
-        <SelectedCourses
-          courses={selectedCourses}
-          deleteCourse={this.deleteCourse}
-        />
-        <ScheduleTable/>
-      </BStyle> 
+          <SelectedCourses
+            courses={selectedCourses}
+            deleteCourse={this.deleteCourse}
+          />
+        </MiddleContainer>
+      </Container> 
     );
   }
 }

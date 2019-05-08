@@ -17,6 +17,8 @@ const Course = styled.div`
   border: 1px solid black;
   border-radius: 30px;
   padding: 0 30px;
+  margin-bottom: 30px;
+  min-height: 50px;
 `;
 
 const Delete = styled.img`
