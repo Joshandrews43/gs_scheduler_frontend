@@ -9,7 +9,7 @@ const GradientButton = styled.button`
   width: 100%;
   border-radius:50px;
   font-size: 16px;
-  color: white;
+  color: #f4e242;
   &:hover {
     background-position: right center;
   }
