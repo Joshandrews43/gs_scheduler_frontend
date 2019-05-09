@@ -9,13 +9,16 @@ const CoursesContainer = styled.div`
 `;
 
 const Course = styled.div`
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  width: calc(100% - 60px);
-  border: 1px solid black;
-  border-radius: 30px;
-  padding: 0 30px;
+color: #003660 ;
+display: flex;
+justify-content: space-between;
+align-items: center;
+width: calc(100% - 60px);
+border: 1px solid #003660;
+border-radius: 3px;
+padding: 0 30px;
+margin-bottom: 5px;
+min-height: 50px;
 `;
 
 const Delete = styled.img`

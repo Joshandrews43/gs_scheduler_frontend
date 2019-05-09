@@ -3,6 +3,7 @@ import styled from 'styled-components';
 import InputForm from './InputForm' ;
 import SelectedCourses from './SelectedCourses' ;
 import Button from './Button';
+//import ScheduleTable from './scheduleTable';
 
 const GenerateButtonContainer = styled.div`
   width: 300px;
@@ -61,6 +62,7 @@ state = {
           courses={selectedCourses}
           deleteCourse={this.deleteCourse}
         />
+  
       </>
     );
   }
