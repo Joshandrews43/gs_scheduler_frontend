@@ -22,7 +22,7 @@ const GradientButton = styled.button`
 function Button(props) {
   return (
     <GradientButton
-      disabled={props.disabled}
+      disabled={props.disabled || false}
       onClick={props.onClick}
       showButton={props.showButton}
     >
