@@ -49,7 +49,10 @@ state = {
         <InputForm
           addCourse={this.addCourse}
         />
-
+        <SelectedCourses
+          courses={selectedCourses}
+          deleteCourse={this.deleteCourse}
+        />
         <GenerateButtonContainer>
         <Button
           disabled={this.state.generateButtonDisabled}
@@ -58,11 +61,7 @@ state = {
           text="Generate Schedules"
         />
         </GenerateButtonContainer>
-        <SelectedCourses
-          courses={selectedCourses}
-          deleteCourse={this.deleteCourse}
-        />
-  
+
       </>
     );
   }

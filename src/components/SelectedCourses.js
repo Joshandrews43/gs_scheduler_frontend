@@ -4,8 +4,9 @@ import styled from 'styled-components';
 import Close from '../assets/close.svg';
 
 const CoursesContainer = styled.div`
-  width: 300px;
+  width: 270px;
   float: right;
+
 `;
 
 const Course = styled.div`
@@ -24,6 +25,7 @@ min-height: 50px;
 const Delete = styled.img`
   width: 15px;
   height: 15px;
+
 `;
 
 class SelectedCourses extends Component {
