@@ -3,7 +3,9 @@ import styled from 'styled-components';
 import InputForm from './InputForm' ;
 import SelectedCourses from './SelectedCourses' ;
 import Title from './Title' ;
-import ScheduleTable from './ScheduleTable' ;
+import GenerateButton from './GenerateButton.js';
+
+import { postRequest, getRequest } from '../helpers/util.js';
 
 import '../styles/reset.css';
 import '../styles/global.css';
@@ -41,6 +43,28 @@ class HomePage extends Component {
     });
   }
 
+  onGenerateClicked = () => {
+    const { selectedCourses } = this.state;
+
+    const params = {
+      mandatory: selectedCourses,
+      optional: [],
+      filters: []
+    }
+
+    postRequest('/generateSchedules', params)
+    .then(res => {
+      console.log(res);
+
+      // once we get a bunch of schedules, change this to iterate over the schedules.
+      const courses = res.schedules[0].courses;
+      parseCourses(courses);
+
+    })
+    .catch(error => {
+      console.log(error);
+    })
+  }
 
 
   render() {
@@ -52,15 +76,59 @@ class HomePage extends Component {
           <InputForm
             addCourse={this.addCourse}
           />
-          <ScheduleTable/>
 
+          <GenerateButton
+            onClick={this.onGenerateClicked}
+          />
           <SelectedCourses
             courses={selectedCourses}
             deleteCourse={this.deleteCourse}
           />
         </MiddleContainer>
-      </Container> 
+      </Container>
     );
+  }
+}
+
+// dates are may 13 to may 17
+// 13 = monday, 14 = tuesday, 15 = wednesday, 16 = thursday, 17 = friday
+
+const parseCourses = courses => {
+  courses.map(course => {
+    const courseName = course.courseID;
+
+    const lectures = course.lectures[0];
+    //  every time this loop runs, it will give you a start and end time for a lecture as tbe result at the bottom.
+    lectures.days.map(day => {
+      const lectureDayNumber = parseDate(day)
+      const startDateString = `May ${lectureDayNumber}, 2019 ${lectures.time.start.hour}:${lectures.time.start.minute}:00`;
+      const endDateString = `May ${lectureDayNumber}, 2019 ${lectures.time.end.hour}:${lectures.time.end.minute}:00`;
+
+      // these are the end result we need.
+      const startDate = new Date(startDateString);
+      const endDate = new Date(endDateString);
+      console.log(startDate + 'to ' + endDate)
+    });
+
+
+
+  })
+}
+
+const parseDate = letterDay => {
+  switch (letterDay) {
+    case 'M':
+      return 13;
+    case 'T':
+      return 14;
+    case 'W':
+      return 15;
+    case 'Th':
+      return 16;
+    case 'F':
+      return 17;
+    default:
+
   }
 }
 

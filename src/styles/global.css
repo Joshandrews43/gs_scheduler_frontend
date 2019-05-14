@@ -13,3 +13,7 @@
     align-items: center;
     justify-content: center;
 }
+
+.calendar_default_main {
+  min-width: 500px;
+}

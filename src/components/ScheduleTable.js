@@ -3,74 +3,68 @@ import styled from "styled-components" ;
 import { Tab } from '@material-ui/core';
 
 const TableContainer = styled.div `
-width: 500px,
-border: 1px solid black;
+  width: 500px,
+  border: 1px solid black;
 `;
 
+const Row = styled.tr`
+
+`;
+
+const TableHeading = styled.th`
+  padding: 5px 10px;
+`;
+
+const TableEntry = styled.td`
+  padding: 5px 10px;
+  text-align: center;
+  border: 1px solid grey;
+`;
+
+
 class ScheduleTable extends Component{
+
+    generateTimes = () => {
+      var times = [];
+      for (var i = 8; i < 12; i++) {
+        times.push(`${i}am`);
+      }
+      times.push('12pm');
+      i = 1;
+      while (i <= 11) {
+        times.push(`${i}pm`);
+        i++;
+      }
+
+
+      return times.map(time => (
+        <Row>
+          <TableEntry>{time}</TableEntry>
+          <TableEntry>Monday</TableEntry>
+          <TableEntry>Tuesday</TableEntry>
+          <TableEntry>Wednesday</TableEntry>
+          <TableEntry>Thursday</TableEntry>
+          <TableEntry>Friday</TableEntry>
+        </Row>
+      ))
+    }
+
     render(){
         return(
             <TableContainer>
             <table align="center">
             <caption>Schedule</caption>
-            <tr>
-                <th>Time</th>
-                <th>Monday</th>
-                <th>Tuesday</th>
-                <th>Wednesday</th>
-                <th>Thursday</th>
-                <th>Friday</th>
-            </tr>
-            <tr>
-                <th>8am</th>
-            </tr>
-            <tr>
-                <th>9am</th>
-            </tr>
-            <tr>
-                <th>10am</th>
-            </tr>
-            <tr>
-                <th>11am</th>
-            </tr>
-            <tr>
-                <th>12pm</th>
-            </tr>
-            <tr>
-                <th>1pm</th>
-            </tr>
-            <tr>
-                <th>2pm</th>
-            </tr>
-            <tr>
-                <th>3pm</th>
-            </tr>
-            <tr>
-                <th>4pm</th>
-            </tr>
-            <tr>
-                <th>5pm</th>
-            </tr>
-            <tr>
-                <th>6pm</th>
-            </tr>
-            <tr>
-                <th>7pm</th>
-            </tr>
-            <tr>
-                <th>8pm</th>
-            </tr>
-            <tr>
-                <th>9pm</th>
-            </tr>
-            <tr>
-                <th>10pm</th>
-            </tr>
-            <tr>
-                <th>11pm</th>
-            </tr>
-
-
+            <tbody>
+              <Row>
+                  <TableHeading>Time</TableHeading>
+                  <TableHeading>Monday</TableHeading>
+                  <TableHeading>Tuesday</TableHeading>
+                  <TableHeading>Wednesday</TableHeading>
+                  <TableHeading>Thursday</TableHeading>
+                  <TableHeading>Friday</TableHeading>
+              </Row>
+              {this.generateTimes()}
+              </tbody>
             </table>
             </TableContainer>
         )

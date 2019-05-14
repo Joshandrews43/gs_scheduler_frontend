@@ -30,7 +30,9 @@ class SelectedCourses extends Component {
     renderCourses = () => {
         const { courses } = this.props;
         return courses.map(course => (
-            <Course>
+            <Course
+              key={course.courseID}
+            >
               {this.formatCourse(course)}
               <Delete
                   src={Close}

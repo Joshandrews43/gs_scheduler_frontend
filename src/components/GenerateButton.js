@@ -3,13 +3,13 @@ import styled from 'styled-components';
 
 const GenerateContainer = styled.div`
     width = 300px ;
-    `;
+`;
 
-class Gbutton extends Component{
+export default class GenerateButton extends Component{
 
-    render(){
-        return(
-            
-    }
+  render() {
+    return (
+      <button onClick={this.props.onClick} />
+    );
+  }
 }
-
