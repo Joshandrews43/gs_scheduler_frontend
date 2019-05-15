@@ -98,6 +98,7 @@ const parseCourses = courses => {
     const courseName = course.courseID;
 
     const lectures = course.lectures[0];
+    const sections = course.sections[0] ;
     //  every time this loop runs, it will give you a start and end time for a lecture as tbe result at the bottom.
     lectures.days.map(day => {
       const lectureDayNumber = parseDate(day)
@@ -108,11 +109,24 @@ const parseCourses = courses => {
       const startDate = new Date(startDateString);
       const endDate = new Date(endDateString);
       console.log(startDate + 'to ' + endDate)
-    });
+    })
+    sections.days.map(day => {
+      const sectionDayNumber = parseDate(day)
+      const startString = `May ${sectionDayNumber}, 2019 ${sections.time.start.hour}:${sections.time.start.minute}:00` ;
+      const endString = `May ${sectionDayNumber}, 2019 ${sections.time.end.hour}:${sections.time.end.minute}:00` ;
+
+      //console log part
+      const startDay = new Date(startString) ;
+      const endDay = new Date(endString) ;
+      console.log(startDay + 'to ' + endDay)
+    
+    })
+
 
 
 
   })
+  
 }
 
 const parseDate = letterDay => {
