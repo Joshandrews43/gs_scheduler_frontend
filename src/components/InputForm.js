@@ -16,10 +16,22 @@ class InputForm extends Component {
     subject: '',
     quarter: '',
     selectedCourse: '',
-    buttonDisabled: true,
+    buttonDisabled: false, //i changed the value of this from true to false so thats its not disabled as default state
     subjects: [],
     quarters: [],
     courses: [],
+  }
+
+  getCourseNamesForSubject = (subject) => { //put function inside
+    if (!courses.default[subject].courses){
+      this.setState({buttonDisabled: true}) ; //if its just the No Courses tab in the array, this is supposed to disable the button.
+      return ["No courses"] ;
+    }
+
+    this.setState({ buttonDisabled: false });
+    return courses.default[subject].courses.map(course => {
+      return course.courseID;
+    })
   }
 
   componentDidMount = () => {
@@ -28,7 +40,6 @@ class InputForm extends Component {
     });
   }
 
-
   handleChange = (event) => {
     const name = event.target.name
     const value = event.target.value
@@ -36,7 +47,7 @@ class InputForm extends Component {
     this.setState({[name]: value}, () => {
       if (this.state.subject) {
         this.setState({
-          courseNames: getCourseNamesForSubject(this.state.subject),
+          courseNames: this.getCourseNamesForSubject(this.state.subject),
           courses: courses.default[this.state.subject].courses
         });
       }
@@ -44,14 +55,13 @@ class InputForm extends Component {
   }
 
   addCourse = () => {
-    console.log('adding course in input form');
     const { selectedCourse } = this.state;
     this.state.courses.map(course => {
       if (course.courseID === selectedCourse) {
         this.props.addCourse(course);
       }
     });
-  }
+}
 
   render() {
     return(
@@ -79,8 +89,7 @@ class InputForm extends Component {
           handleChange={this.handleChange}
         />
         <Button
-          disabled={false}
-          showButton={true}
+          disabled={this.state.buttonDisabled} //now disabled will be set to whatever the state of buttonDisabled is set to
           onClick={this.addCourse}
           text="Add Course"
         />
@@ -91,11 +100,7 @@ class InputForm extends Component {
 
 export default InputForm;
 
-const getCourseNamesForSubject = (subject) => {
-  return courses.default[subject].courses.map(course => {
-    return course.courseID;
-  })
-}
+
 
 const getSubjects = () => {
   return Object.keys(courses.default);
