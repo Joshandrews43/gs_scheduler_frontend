@@ -19,6 +19,10 @@ const MiddleContainer = styled.div`
   width: 100%;
   justify-content: space-evenly;
 `;
+const GenerateButtonContainer = styled.div`
+  width: 300px;
+  margin: 0 auto;
+`;
 
 class HomePage extends Component {
   state = {
@@ -103,6 +107,7 @@ const parseCourses = courses => {
     const lectures = course.lectures[0];
     const sections = lectures.sections[0] ;
     //  every time this loop runs, it will give you a start and end time for a lecture as tbe result at the bottom.
+
     lectures.days.map(day => {
       const lectureDayNumber = parseDate(day)
       const startDateString = `May ${lectureDayNumber}, 2019 ${lectures.time.start.hour}:${lectures.time.start.minute}:00`;

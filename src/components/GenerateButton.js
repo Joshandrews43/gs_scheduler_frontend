@@ -1,15 +1,22 @@
 import React, { Component } from 'react';
 import styled from 'styled-components';
+import Button from "./Button.js";
 
 const GenerateContainer = styled.div`
-    width = 300px ;
+    width: 300px ;
+    margin: 0 auto;
 `;
 
 export default class GenerateButton extends Component{
 
   render() {
     return (
-      <button onClick={this.props.onClick} />
+      <GenerateContainer>
+      <Button
+      onClick={this.props.onClick}
+      text = "Generate schedule"
+       />
+       </GenerateContainer>
     );
   }
 }
