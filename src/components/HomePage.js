@@ -57,9 +57,12 @@ class HomePage extends Component {
       console.log(res);
 
       // once we get a bunch of schedules, change this to iterate over the schedules.
-      const courses = res.schedules[0].courses;
-      parseCourses(courses);
+      const courses = res.schedules.map(schedule =>{
+        const courses = schedule.courses ;
+        parseCourses(courses);
 
+      });
+    
     })
     .catch(error => {
       console.log(error);
@@ -98,7 +101,7 @@ const parseCourses = courses => {
     const courseName = course.courseID;
 
     const lectures = course.lectures[0];
-    const sections = course.sections[0] ;
+    const sections = lectures.sections[0] ;
     //  every time this loop runs, it will give you a start and end time for a lecture as tbe result at the bottom.
     lectures.days.map(day => {
       const lectureDayNumber = parseDate(day)
