@@ -11,7 +11,8 @@ import '../styles/reset.css';
 import '../styles/global.css';
 
 import WeekCalendar from 'react-week-calendar';
-import 'react-week-calendar/dist/style.less';
+import 'react-week-calendar/dist/style.css';
+import moment from 'moment';
 
 const Container = styled.div`
   background-image: linear-gradient(to top, #e6e9f0 0%, #eef1f5 100%);
@@ -94,7 +95,14 @@ class HomePage extends Component {
             courses={selectedCourses}
             deleteCourse={this.deleteCourse}
           />
-          <WeekCalendar/>
+          <WeekCalendar
+           className = "style" 
+           numberOfDays="5"
+           dayFormat="dd"
+           firstDay = {moment().day(1)}
+           startTime = {moment({h: 8, m: 0})}
+           endTime = {moment({h: 22, m: 15})}
+           />
         </MiddleContainer>
       </Container>
     );
