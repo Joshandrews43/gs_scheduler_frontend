@@ -10,6 +10,9 @@ import { postRequest, getRequest } from '../helpers/util.js';
 import '../styles/reset.css';
 import '../styles/global.css';
 
+import WeekCalendar from 'react-week-calendar';
+import 'react-week-calendar/dist/style.less';
+
 const Container = styled.div`
   background-image: linear-gradient(to top, #e6e9f0 0%, #eef1f5 100%);
   height: 100vh;
@@ -91,6 +94,7 @@ class HomePage extends Component {
             courses={selectedCourses}
             deleteCourse={this.deleteCourse}
           />
+          <WeekCalendar/>
         </MiddleContainer>
       </Container>
     );

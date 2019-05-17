@@ -4,10 +4,12 @@
   "private": true,
   "dependencies": {
     "@material-ui/core": "^3.9.3",
+    "moment": "^2.24.0",
     "react": "^16.8.6",
     "react-big-calendar": "^0.20.4",
     "react-dom": "^16.8.6",
     "react-scripts": "2.1.8",
+    "react-week-calendar": "^0.1.2",
     "styled-components": "^4.2.0"
   },
   "scripts": {
