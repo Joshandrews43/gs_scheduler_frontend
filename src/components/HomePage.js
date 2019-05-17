@@ -10,9 +10,17 @@ import { postRequest, getRequest } from '../helpers/util.js';
 import '../styles/reset.css';
 import '../styles/global.css';
 
+//calendar imports
 import WeekCalendar from 'react-week-calendar';
 import 'react-week-calendar/dist/style.css';
 import moment from 'moment';
+
+//filter dropdown imports
+import Dropdown from 'react-dropdown';
+import 'react-dropdown/style.css';
+
+
+
 
 const Container = styled.div`
   background-image: linear-gradient(to top, #e6e9f0 0%, #eef1f5 100%);
@@ -39,6 +47,7 @@ class HomePage extends Component {
       selectedCourses: selectedCourses.concat(course)
     })
   }
+  
 
   deleteCourse = (courseToDelete) => {
     const { selectedCourses } = this.state;
@@ -83,6 +92,13 @@ class HomePage extends Component {
     return (
       <Container className="flex-column flex-full-center">
         <Title/>
+        <Dropdown 
+        className = 'myClassName'
+        placeholder="Select an option"
+        options={options} 
+        onChange={this._onSelect} 
+        value={defaultOption} 
+         />
         <MiddleContainer className="flex-row">
           <InputForm
             addCourse={this.addCourse}
@@ -102,12 +118,14 @@ class HomePage extends Component {
            firstDay = {moment().day(1)}
            startTime = {moment({h: 8, m: 0})}
            endTime = {moment({h: 22, m: 15})}
+           dayCellComponent = "startSelection"
            />
         </MiddleContainer>
       </Container>
     );
   }
 }
+
 
 // dates are may 13 to may 17
 // 13 = monday, 14 = tuesday, 15 = wednesday, 16 = thursday, 17 = friday
@@ -149,6 +167,12 @@ const parseCourses = courses => {
   
 }
 
+const options = [
+  'Morning Classes', 'Mid-Day Classes', 'Evening Classes', 'Highest Rate My Professor'
+];
+const defaultOption = options[0];
+
+
 const parseDate = letterDay => {
   switch (letterDay) {
     case 'M':
@@ -164,6 +188,8 @@ const parseDate = letterDay => {
     default:
 
   }
+
+  
 }
 
 export default HomePage;
