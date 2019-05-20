@@ -3,7 +3,7 @@ import styled from 'styled-components';
 import DropdownInput from './DropdownInput';
 import Button from './Button';
 import * as staticData from '../assets/staticData.json';
-import * as courses from '../assets/spring2019.json';
+import * as courses from '../assets/fall2019.json';
 
 const InputFormContainer = styled.div`
   display: flex;
@@ -103,5 +103,6 @@ export default InputForm;
 
 
 const getSubjects = () => {
-  return Object.keys(courses.default);
+  const sortedSubjects = Object.keys(courses.default).sort();
+  return sortedSubjects;
 }
