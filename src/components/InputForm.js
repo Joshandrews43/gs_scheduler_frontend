@@ -9,6 +9,7 @@ const InputFormContainer = styled.div`
   display: flex;
   flex-direction: column;
   width: 300px;
+  display: ${props => props.displayForm ? 'block' : 'none'}
 `;
 
 class InputForm extends Component {
@@ -65,7 +66,7 @@ class InputForm extends Component {
 
   render() {
     return(
-      <InputFormContainer>
+      <InputFormContainer displayForm={this.props.displayForm}>
         <DropdownInput
           options={staticData.quarters}
           value={this.state.quarter}

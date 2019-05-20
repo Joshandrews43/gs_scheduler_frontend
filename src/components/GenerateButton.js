@@ -3,6 +3,8 @@ import styled from 'styled-components';
 import Button from "./Button.js";
 
 const GenerateContainer = styled.div`
+    display: ${props => props.displayButton ? 'block' : 'none'}
+
     width: 300px ;
     margin: 0 auto;
 `;
@@ -11,10 +13,10 @@ export default class GenerateButton extends Component{
 
   render() {
     return (
-      <GenerateContainer>
+      <GenerateContainer displayButton={this.props.displayButton}>
       <Button
-      onClick={this.props.onClick}
-      text = "Generate schedule"
+        onClick={this.props.onClick}
+        text = "Generate schedule"
        />
        </GenerateContainer>
     );

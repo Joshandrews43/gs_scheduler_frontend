@@ -13,14 +13,32 @@ import '../styles/global.css';
 //calendar imports
 import WeekCalendar from 'react-week-calendar';
 import 'react-week-calendar/dist/style.css';
+
+//moment imports
 import moment from 'moment';
+import { extendMoment } from 'moment-range';
 
 //filter dropdown imports
 import Dropdown from 'react-dropdown';
 import 'react-dropdown/style.css';
 
+const DropdownContainer = styled.div`
+  display: ${props => props.displayDropdown ? 'block' : 'none'}
+`;
 
+const CalendarContainer = styled.div`
+  min-width: 700px;
+  display: ${props => props.displayCalendar ? 'block' : 'none'}
+  overflow-y: scroll;
+`;
 
+const WeekCalendarContainer = styled.div`
+  margin-bottom: 30px;
+`;
+
+const InputVisibleContainer = styled.div`
+  display: ${props => props.displayInputForm ? 'block' : 'none'}
+`;
 
 const Container = styled.div`
   background-image: linear-gradient(to top, #e6e9f0 0%, #eef1f5 100%);
@@ -31,14 +49,16 @@ const MiddleContainer = styled.div`
   width: 100%;
   justify-content: space-evenly;
 `;
-const GenerateButtonContainer = styled.div`
-  width: 300px;
-  margin: 0 auto;
-`;
+
+// terrible code, never do this
+// document.getElementsByClassName('weekCalendar')
+
 
 class HomePage extends Component {
   state = {
-    selectedCourses: []
+    selectedCourses: [],
+    displaySchedules: false,
+    scheduleTimes: []
   }
 
   addCourse = (course) => {
@@ -71,12 +91,14 @@ class HomePage extends Component {
 
     postRequest('/generateSchedules', params)
     .then(res => {
-      console.log(res);
 
       // once we get a bunch of schedules, change this to iterate over the schedules.
-      const courses = res.schedules.map(schedule =>{
+      const courses = res.schedules.map(schedule => {
         const courses = schedule.courses ;
-        parseCourses(courses);
+        this.setState({
+          scheduleTimes: this.state.scheduleTimes.concat([[]])
+        })
+        this.parseCourses(courses);
 
       });
     
@@ -84,45 +106,114 @@ class HomePage extends Component {
     .catch(error => {
       console.log(error);
     })
+
+    this.setState({ displaySchedules: true });
+  }
+
+  parseCourses = courses => {
+    const lastSchedule = this.state.scheduleTimes[this.state.scheduleTimes.length - 1];
+    courses.map(course => {
+      const courseName = course.courseID;
+  
+      const lectures = course.lectures[0];
+      const sections = lectures.sections[0] ;
+      //  every time this loop runs, it will give you a start and end time for a lecture as tbe result at the bottom.
+  
+      lectures.days.map(day => {
+        const lectureDayNumber = parseDate(day)
+      
+  
+        // these are the end result we need.
+        
+        const momentLectureStart = moment({days: lectureDayNumber, h: lectures.time.start.hour, m: lectures.time.start.minute}) ;
+        const momentLectureEnd = moment({days: lectureDayNumber, h: lectures.time.end.hour, m: lectures.time.end.minute}) ;
+  
+        const momentInterval = {
+          start: momentLectureStart,
+          end: momentLectureEnd
+        }
+
+        lastSchedule.push(momentInterval);
+      })
+
+  
+      sections.days.map(day => {
+        const sectionDayNumber = parseDate(day)
+
+        const momentSectionStart = moment({days: sectionDayNumber, h: sections.time.start.hour, m: sections.time.start.minute}) ;
+        const momentSectionEnd = moment({days: sectionDayNumber, h: sections.time.end.hour, m: sections.time.end.minute}) ;
+  
+        const momentInterval = {
+          start: momentSectionStart,
+          end: momentSectionEnd
+        }
+
+        lastSchedule.push(momentInterval);
+      })
+
+      this.setState({
+        scheduleTimes: this.state.scheduleTimes.concat([lastSchedule])
+      })
+    })
   }
 
 
   render() {
+    console.log('Schedule times:')
+    console.log(this.state.scheduleTimes)
+
     const { selectedCourses } = this.state;
     return (
-      <Container className="flex-column flex-full-center">
-        <Title/>
-        <Dropdown 
-        className = 'myClassName'
-        placeholder="Select an option"
-        options={options} 
-        onChange={this._onSelect} 
-        value={defaultOption} 
-         />
-        <MiddleContainer className="flex-row">
+      <Container className="flex-row flex-full-center">
           <InputForm
             addCourse={this.addCourse}
+            displayForm={!this.state.displaySchedules}
           />
-
+          <Title/>
+        <DropdownContainer displayDropdown={!this.state.displaySchedules}>
+          <Dropdown 
+            placeholder="Filter by:"
+            options={options} 
+            onChange={this._onSelect} 
+          />
+         </DropdownContainer>
+        <MiddleContainer className="flex-column">
           <GenerateButton
             onClick={this.onGenerateClicked}
+            displayButton={!this.state.displaySchedules}
           />
+          <CalendarContainer
+            displayCalendar={this.state.displaySchedules}
+          >
+            {this.renderCalendars()}
+          </CalendarContainer>
           <SelectedCourses
             courses={selectedCourses}
             deleteCourse={this.deleteCourse}
           />
-          <WeekCalendar
-           className = "style" 
-           numberOfDays="5"
-           dayFormat="dd"
-           firstDay = {moment().day(1)}
-           startTime = {moment({h: 8, m: 0})}
-           endTime = {moment({h: 22, m: 15})}
-           dayCellComponent = "startSelection"
-           />
         </MiddleContainer>
       </Container>
     );
+  }
+
+  renderCalendars = () => {
+    if (this.state.scheduleTimes[0] === []) return null;
+    return this.state.scheduleTimes.map(schedule => {
+      return (
+        <WeekCalendarContainer>
+          <WeekCalendar
+            useModal = "true" 
+            className = "style" 
+            numberOfDays={5}
+            dayFormat="dd"
+            firstDay = {moment().day(1)}
+            startTime = {moment({h: 8, m: 0})}
+            endTime = {moment({h: 22, m: 15})}
+            selectedIntervals={schedule}
+          />
+        </WeekCalendarContainer>
+      )
+    })
   }
 }
 
@@ -130,45 +221,10 @@ class HomePage extends Component {
 // dates are may 13 to may 17
 // 13 = monday, 14 = tuesday, 15 = wednesday, 16 = thursday, 17 = friday
 
-const parseCourses = courses => {
-  courses.map(course => {
-    const courseName = course.courseID;
 
-    const lectures = course.lectures[0];
-    const sections = lectures.sections[0] ;
-    //  every time this loop runs, it will give you a start and end time for a lecture as tbe result at the bottom.
-
-    lectures.days.map(day => {
-      const lectureDayNumber = parseDate(day)
-      const startDateString = `May ${lectureDayNumber}, 2019 ${lectures.time.start.hour}:${lectures.time.start.minute}:00`;
-      const endDateString = `May ${lectureDayNumber}, 2019 ${lectures.time.end.hour}:${lectures.time.end.minute}:00`;
-
-      // these are the end result we need.
-      const startDate = new Date(startDateString);
-      const endDate = new Date(endDateString);
-      console.log(startDate + 'to ' + endDate)
-    })
-    sections.days.map(day => {
-      const sectionDayNumber = parseDate(day)
-      const startString = `May ${sectionDayNumber}, 2019 ${sections.time.start.hour}:${sections.time.start.minute}:00` ;
-      const endString = `May ${sectionDayNumber}, 2019 ${sections.time.end.hour}:${sections.time.end.minute}:00` ;
-
-      //console log part
-      const startDay = new Date(startString) ;
-      const endDay = new Date(endString) ;
-      console.log(startDay + 'to ' + endDay)
-    
-    })
-
-
-
-
-  })
-  
-}
 
 const options = [
-  'Morning Classes', 'Mid-Day Classes', 'Evening Classes', 'Highest Rate My Professor'
+   'Morning Classes', 'Mid-Day Classes', 'Evening Classes', 'Highest Rate My Professor'
 ];
 const defaultOption = options[0];
 
@@ -176,15 +232,15 @@ const defaultOption = options[0];
 const parseDate = letterDay => {
   switch (letterDay) {
     case 'M':
-      return 13;
+      return 1;
     case 'T':
-      return 14;
+      return 2;
     case 'W':
-      return 15;
+      return 3;
     case 'Th':
-      return 16;
+      return 4;
     case 'F':
-      return 17;
+      return 5;
     default:
 
   }
