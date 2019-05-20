@@ -10,6 +10,18 @@ import { postRequest, getRequest } from '../helpers/util.js';
 import '../styles/reset.css';
 import '../styles/global.css';
 
+//calendar imports
+import WeekCalendar from 'react-week-calendar';
+import 'react-week-calendar/dist/style.css';
+import moment from 'moment';
+
+//filter dropdown imports
+import Dropdown from 'react-dropdown';
+import 'react-dropdown/style.css';
+
+
+
+
 const Container = styled.div`
   background-image: linear-gradient(to top, #e6e9f0 0%, #eef1f5 100%);
   height: 100vh;
@@ -35,6 +47,7 @@ class HomePage extends Component {
       selectedCourses: selectedCourses.concat(course)
     })
   }
+  
 
   deleteCourse = (courseToDelete) => {
     const { selectedCourses } = this.state;
@@ -61,9 +74,12 @@ class HomePage extends Component {
       console.log(res);
 
       // once we get a bunch of schedules, change this to iterate over the schedules.
-      const courses = res.schedules[0].courses;
-      parseCourses(courses);
+      const courses = res.schedules.map(schedule =>{
+        const courses = schedule.courses ;
+        parseCourses(courses);
 
+      });
+    
     })
     .catch(error => {
       console.log(error);
@@ -76,6 +92,13 @@ class HomePage extends Component {
     return (
       <Container className="flex-column flex-full-center">
         <Title/>
+        <Dropdown 
+        className = 'myClassName'
+        placeholder="Select an option"
+        options={options} 
+        onChange={this._onSelect} 
+        value={defaultOption} 
+         />
         <MiddleContainer className="flex-row">
           <InputForm
             addCourse={this.addCourse}
@@ -88,11 +111,21 @@ class HomePage extends Component {
             courses={selectedCourses}
             deleteCourse={this.deleteCourse}
           />
+          <WeekCalendar
+           className = "style" 
+           numberOfDays="5"
+           dayFormat="dd"
+           firstDay = {moment().day(1)}
+           startTime = {moment({h: 8, m: 0})}
+           endTime = {moment({h: 22, m: 15})}
+           dayCellComponent = "startSelection"
+           />
         </MiddleContainer>
       </Container>
     );
   }
 }
+
 
 // dates are may 13 to may 17
 // 13 = monday, 14 = tuesday, 15 = wednesday, 16 = thursday, 17 = friday
@@ -102,6 +135,7 @@ const parseCourses = courses => {
     const courseName = course.courseID;
 
     const lectures = course.lectures[0];
+    const sections = lectures.sections[0] ;
     //  every time this loop runs, it will give you a start and end time for a lecture as tbe result at the bottom.
 
     lectures.days.map(day => {
@@ -113,12 +147,31 @@ const parseCourses = courses => {
       const startDate = new Date(startDateString);
       const endDate = new Date(endDateString);
       console.log(startDate + 'to ' + endDate)
-    });
+    })
+    sections.days.map(day => {
+      const sectionDayNumber = parseDate(day)
+      const startString = `May ${sectionDayNumber}, 2019 ${sections.time.start.hour}:${sections.time.start.minute}:00` ;
+      const endString = `May ${sectionDayNumber}, 2019 ${sections.time.end.hour}:${sections.time.end.minute}:00` ;
+
+      //console log part
+      const startDay = new Date(startString) ;
+      const endDay = new Date(endString) ;
+      console.log(startDay + 'to ' + endDay)
+    
+    })
+
 
 
 
   })
+  
 }
+
+const options = [
+  'Morning Classes', 'Mid-Day Classes', 'Evening Classes', 'Highest Rate My Professor'
+];
+const defaultOption = options[0];
+
 
 const parseDate = letterDay => {
   switch (letterDay) {
@@ -135,6 +188,8 @@ const parseDate = letterDay => {
     default:
 
   }
+
+  
 }
 
 export default HomePage;
