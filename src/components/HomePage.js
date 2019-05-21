@@ -167,7 +167,15 @@ class HomePage extends Component {
 
   render() {
     console.log('Schedule times:')
-    console.log(this.state.scheduleTimes)
+    this.state.scheduleTimes.map(schedule => {
+      this.state.scheduleTimes.map(schedule2 => {
+        if (schedule === schedule2) {
+          console.log('same?');
+          console.log(schedule)
+          console.log(schedule2)
+        }
+      })
+    })
 
     const { selectedCourses } = this.state;
     return (
