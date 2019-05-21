@@ -38,11 +38,10 @@ const InputVisibleContainer = styled.div`
 `;
 
 const Container = styled.div`
-  height: 100vh;
+  padding-top: 150px;
   justify-content: center;
   align-items: center;
   position: relative;
-  top: -50px;
 `;
 
 const MiddleContainer = styled.div`
@@ -61,7 +60,8 @@ class HomePage extends Component {
   state = {
     selectedCourses: [],
     displaySchedules: false,
-    scheduleTimes: []
+    scheduleTimes: [],
+    filter: '',
   }
 
   addCourse = (course) => {
@@ -141,8 +141,8 @@ class HomePage extends Component {
       sections.days.map(day => {
         const sectionDayNumber = parseDate(day)
 
-        const momentSectionStart = moment({days: sectionDayNumber, h: sections.time.start.hour, m: sections.time.start.minute});
-        const momentSectionEnd = moment({days: sectionDayNumber, h: sections.time.end.hour, m: sections.time.end.minute});
+        const momentSectionStart = moment({day: sectionDayNumber, h: sections.time.start.hour, m: sections.time.start.minute});
+        const momentSectionEnd = moment({day: sectionDayNumber, h: sections.time.end.hour, m: sections.time.end.minute});
 
         const momentInterval = {
           start: momentSectionStart,
@@ -155,6 +155,12 @@ class HomePage extends Component {
       this.setState({
         scheduleTimes: this.state.scheduleTimes.concat([lastSchedule])
       })
+    })
+  }
+
+  onFilterSelect = (e) => {
+    this.setState({
+      filter: e.target.value
     })
   }
 
@@ -174,6 +180,7 @@ class HomePage extends Component {
           courses={selectedCourses}
           deleteCourse={this.deleteCourse}
         />
+
         <MiddleContainer className="flex-row">
           <div className="flex-column flex-full-center">
             <DropdownContainer
@@ -182,35 +189,40 @@ class HomePage extends Component {
               <DropdownInput
                 labelText="Select Filter (optional)"
                 options={options}
-                onChange={this._onSelect}
+                value={this.state.filter}
+                onChange={this.onFilterSelect}
               />
             </DropdownContainer>
             <GenerateButton
               onClick={this.onGenerateClicked}
               displayButton={!this.state.displaySchedules}
             />
-            <CalendarContainer
-              displayCalendar={this.state.displaySchedules}
-            >
-              {this.renderCalendars()}
-            </CalendarContainer>
           </div>
         </MiddleContainer>
+
+        <CalendarContainer
+          displayCalendar={this.state.displaySchedules}
+        >
+          {this.renderCalendars()}
+        </CalendarContainer>
+
       </Container>
     );
   }
 
   renderCalendars = () => {
     if (this.state.scheduleTimes[0] === []) return null;
-    return this.state.scheduleTimes.map(schedule => {
+    return this.state.scheduleTimes.map((schedule, index) => {
       return (
-        <WeekCalendarContainer>
+        <WeekCalendarContainer key={`schedule${index}`}>
           <WeekCalendar
-            useModal = "true"
-            className = "style"
+            key={`calendar${index}`}
+            useModal={true}
+            className="style"
             numberOfDays={5}
             dayFormat="dd"
-            firstDay = {moment().day(1)}
+            scaleUnit={30}
+            firstDay = {moment().date(20)}
             startTime = {moment({h: 8, m: 0})}
             endTime = {moment({h: 22, m: 15})}
             selectedIntervals={schedule}
@@ -236,15 +248,15 @@ const defaultOption = options[0];
 const parseDate = letterDay => {
   switch (letterDay) {
     case 'M':
-      return 1;
+      return 20;
     case 'T':
-      return 2;
+      return 21;
     case 'W':
-      return 3;
+      return 22;
     case 'Th':
-      return 4;
+      return 23;
     case 'F':
-      return 5;
+      return 24;
     default:
 
   }

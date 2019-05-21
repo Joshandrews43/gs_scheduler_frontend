@@ -16,7 +16,7 @@ export default class GenerateButton extends Component{
       <GenerateContainer displayButton={this.props.displayButton}>
       <Button
         onClick={this.props.onClick}
-        text = "Generate schedule"
+        text="Generate schedule"
        />
        </GenerateContainer>
     );
