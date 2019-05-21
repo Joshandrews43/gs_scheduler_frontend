@@ -6,10 +6,10 @@ import * as staticData from '../assets/staticData.json';
 import * as courses from '../assets/fall2019.json';
 
 const InputFormContainer = styled.div`
-  display: flex;
-  flex-direction: column;
-  width: 300px;
-  display: ${props => props.displayForm ? 'block' : 'none'}
+  flex-direction: row;
+  display: ${props => props.displayForm ? 'flex' : 'none'}
+  justify-content: space-between;
+  max-width: 940px;
 `;
 
 class InputForm extends Component {
@@ -25,8 +25,8 @@ class InputForm extends Component {
 
   getCourseNamesForSubject = (subject) => { //put function inside
     if (!courses.default[subject].courses){
-      this.setState({buttonDisabled: true}) ; //if its just the No Courses tab in the array, this is supposed to disable the button.
-      return ["No courses"] ;
+      this.setState({buttonDisabled: true}); //if its just the No Courses tab in the array, this is supposed to disable the button.
+      return ["No courses"];
     }
 
     this.setState({ buttonDisabled: false });

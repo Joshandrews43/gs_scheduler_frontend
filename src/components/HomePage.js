@@ -1,10 +1,10 @@
 import React, { Component } from 'react';
 import styled from 'styled-components';
-import InputForm from './InputForm' ;
-import SelectedCourses from './SelectedCourses' ;
-import Title from './Title' ;
+import InputForm from './InputForm';
+import SelectedCourses from './SelectedCourses';
+import Title from './Title';
 import GenerateButton from './GenerateButton.js';
-
+import DropdownInput from './DropdownInput.js';
 import { postRequest, getRequest } from '../helpers/util.js';
 
 import '../styles/reset.css';
@@ -18,12 +18,9 @@ import 'react-week-calendar/dist/style.css';
 import moment from 'moment';
 import { extendMoment } from 'moment-range';
 
-//filter dropdown imports
-import Dropdown from 'react-dropdown';
-import 'react-dropdown/style.css';
-
 const DropdownContainer = styled.div`
   display: ${props => props.displayDropdown ? 'block' : 'none'}
+  width: 200px;
 `;
 
 const CalendarContainer = styled.div`
@@ -41,13 +38,19 @@ const InputVisibleContainer = styled.div`
 `;
 
 const Container = styled.div`
-  background-image: linear-gradient(to top, #e6e9f0 0%, #eef1f5 100%);
   height: 100vh;
+  justify-content: center;
+  align-items: center;
+  position: relative;
+  top: -50px;
 `;
 
 const MiddleContainer = styled.div`
-  width: 100%;
-  justify-content: space-evenly;
+  margin-top: 30px;
+  align-items: center;
+  width: 940px;
+  justify-content: space-around;
+
 `;
 
 // terrible code, never do this
@@ -67,7 +70,7 @@ class HomePage extends Component {
       selectedCourses: selectedCourses.concat(course)
     })
   }
-  
+
 
   deleteCourse = (courseToDelete) => {
     const { selectedCourses } = this.state;
@@ -93,15 +96,16 @@ class HomePage extends Component {
     .then(res => {
 
       // once we get a bunch of schedules, change this to iterate over the schedules.
-      const courses = res.schedules.map(schedule => {
-        const courses = schedule.courses ;
+      const courses = res.schedules.map((schedule, index) => {
+        if (index > 10) return;
+        const courses = schedule.courses;
         this.setState({
           scheduleTimes: this.state.scheduleTimes.concat([[]])
         })
         this.parseCourses(courses);
 
       });
-    
+
     })
     .catch(error => {
       console.log(error);
@@ -114,20 +118,17 @@ class HomePage extends Component {
     const lastSchedule = this.state.scheduleTimes[this.state.scheduleTimes.length - 1];
     courses.map(course => {
       const courseName = course.courseID;
-  
+
       const lectures = course.lectures[0];
-      const sections = lectures.sections[0] ;
+      const sections = lectures.sections[0];
       //  every time this loop runs, it will give you a start and end time for a lecture as tbe result at the bottom.
-  
+
       lectures.days.map(day => {
         const lectureDayNumber = parseDate(day)
-      
-  
-        // these are the end result we need.
-        
-        const momentLectureStart = moment({days: lectureDayNumber, h: lectures.time.start.hour, m: lectures.time.start.minute}) ;
-        const momentLectureEnd = moment({days: lectureDayNumber, h: lectures.time.end.hour, m: lectures.time.end.minute}) ;
-  
+
+        const momentLectureStart = moment({days: lectureDayNumber, h: lectures.time.start.hour, m: lectures.time.start.minute});
+        const momentLectureEnd = moment({days: lectureDayNumber, h: lectures.time.end.hour, m: lectures.time.end.minute});
+
         const momentInterval = {
           start: momentLectureStart,
           end: momentLectureEnd
@@ -136,13 +137,13 @@ class HomePage extends Component {
         lastSchedule.push(momentInterval);
       })
 
-  
+
       sections.days.map(day => {
         const sectionDayNumber = parseDate(day)
 
-        const momentSectionStart = moment({days: sectionDayNumber, h: sections.time.start.hour, m: sections.time.start.minute}) ;
-        const momentSectionEnd = moment({days: sectionDayNumber, h: sections.time.end.hour, m: sections.time.end.minute}) ;
-  
+        const momentSectionStart = moment({days: sectionDayNumber, h: sections.time.start.hour, m: sections.time.start.minute});
+        const momentSectionEnd = moment({days: sectionDayNumber, h: sections.time.end.hour, m: sections.time.end.minute});
+
         const momentInterval = {
           start: momentSectionStart,
           end: momentSectionEnd
@@ -164,33 +165,36 @@ class HomePage extends Component {
 
     const { selectedCourses } = this.state;
     return (
-      <Container className="flex-row flex-full-center">
-          <InputForm
-            addCourse={this.addCourse}
-            displayForm={!this.state.displaySchedules}
-          />
-          <Title/>
-        <DropdownContainer displayDropdown={!this.state.displaySchedules}>
-          <Dropdown 
-            placeholder="Filter by:"
-            options={options} 
-            onChange={this._onSelect} 
-          />
-         </DropdownContainer>
-        <MiddleContainer className="flex-column">
-          <GenerateButton
-            onClick={this.onGenerateClicked}
-            displayButton={!this.state.displaySchedules}
-          />
-          <CalendarContainer
-            displayCalendar={this.state.displaySchedules}
-          >
-            {this.renderCalendars()}
-          </CalendarContainer>
-          <SelectedCourses
-            courses={selectedCourses}
-            deleteCourse={this.deleteCourse}
-          />
+      <Container className="flex-column">
+        <InputForm
+          addCourse={this.addCourse}
+          displayForm={!this.state.displaySchedules}
+        />
+        <SelectedCourses
+          courses={selectedCourses}
+          deleteCourse={this.deleteCourse}
+        />
+        <MiddleContainer className="flex-row">
+          <div className="flex-column flex-full-center">
+            <DropdownContainer
+              displayDropdown={!this.state.displaySchedules}
+            >
+              <DropdownInput
+                labelText="Select Filter (optional)"
+                options={options}
+                onChange={this._onSelect}
+              />
+            </DropdownContainer>
+            <GenerateButton
+              onClick={this.onGenerateClicked}
+              displayButton={!this.state.displaySchedules}
+            />
+            <CalendarContainer
+              displayCalendar={this.state.displaySchedules}
+            >
+              {this.renderCalendars()}
+            </CalendarContainer>
+          </div>
         </MiddleContainer>
       </Container>
     );
@@ -202,8 +206,8 @@ class HomePage extends Component {
       return (
         <WeekCalendarContainer>
           <WeekCalendar
-            useModal = "true" 
-            className = "style" 
+            useModal = "true"
+            className = "style"
             numberOfDays={5}
             dayFormat="dd"
             firstDay = {moment().day(1)}
@@ -245,7 +249,7 @@ const parseDate = letterDay => {
 
   }
 
-  
+
 }
 
 export default HomePage;

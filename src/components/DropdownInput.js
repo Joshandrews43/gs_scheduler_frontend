@@ -6,7 +6,9 @@ import MenuItem from '@material-ui/core/MenuItem';
 const InputContainer = styled.div`
   display: flex;
   flex-direction: column;
-  width: 100%;
+  width: 200px;
+  margin-left: 10px;
+  margin-right: 10px;
   margin-bottom: 30px;
 `;
 

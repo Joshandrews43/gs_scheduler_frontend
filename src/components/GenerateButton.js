@@ -5,7 +5,7 @@ import Button from "./Button.js";
 const GenerateContainer = styled.div`
     display: ${props => props.displayButton ? 'block' : 'none'}
 
-    width: 300px ;
+    width: 100%;
     margin: 0 auto;
 `;
 

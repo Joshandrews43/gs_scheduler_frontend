@@ -4,16 +4,17 @@ import styled from 'styled-components';
 import Close from '../assets/close.svg';
 
 const CoursesContainer = styled.div`
-  width: 300px;
-  float: right;
+  width: 100%;
+  max-width: 940px;
+  flex-wrap: wrap;
 `;
 
 const Course = styled.div`
-  color: #003660 ;
+  color: #003660;
   display: flex;
   justify-content: space-between;
   align-items: center;
-  width: calc(100% - 60px);
+  width: 250px;
   border: 1px solid black;
   border-radius: 30px;
   padding: 0 30px;
@@ -48,7 +49,7 @@ class SelectedCourses extends Component {
 
     render(){
         return(
-            <CoursesContainer>
+            <CoursesContainer className="flex-row">
                 {this.renderCourses()}
             </CoursesContainer>
         );

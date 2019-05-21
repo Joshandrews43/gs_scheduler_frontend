@@ -1,5 +1,5 @@
-import React, {Component} from 'react' ;
-import styled from "styled-components" ;
+import React, {Component} from 'react';
+import styled from "styled-components";
 import { Tab } from '@material-ui/core';
 
 const TableContainer = styled.div `
@@ -73,4 +73,4 @@ class ScheduleTable extends Component{
 
 }
 
-export default ScheduleTable ;
+export default ScheduleTable;

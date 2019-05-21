@@ -6,7 +6,7 @@ const GradientButton = styled.button`
 	transition: 0.5s;
 	background-size: 200% auto;
   height: 50px;
-  width: 100%;
+  width: 200px;
   border-radius:50px;
   font-size: 16px;
   color: white;
