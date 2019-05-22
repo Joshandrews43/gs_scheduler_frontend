@@ -13,7 +13,8 @@ export const postRequest = async(url, params) => {
    .catch(err => {
      console.log(err);
    })
-
+   console.log(params)
+   console.log(res);
    return res;
 }
 

@@ -62,6 +62,7 @@ class HomePage extends Component {
     displaySchedules: false,
     scheduleTimes: [],
     filter: '',
+    render: false,
   }
 
   addCourse = (course) => {
@@ -96,27 +97,28 @@ class HomePage extends Component {
     .then(res => {
 
       // once we get a bunch of schedules, change this to iterate over the schedules.
-      const courses = res.schedules.map((schedule, index) => {
-        if (index > 10) return;
+      res.schedules.map((schedule, index) => {
+        console.log('index:' + index)
         const courses = schedule.courses;
         this.setState({
           scheduleTimes: this.state.scheduleTimes.concat([[]])
+        }, () => {
+          console.log('size of scheduleTimes: ' + this.state.scheduleTimes.length)
+          this.parseCourses(courses);
         })
-        this.parseCourses(courses);
-
       });
-
     })
     .catch(error => {
       console.log(error);
     })
 
-    this.setState({ displaySchedules: true });
+    this.setState({ displaySchedules: true, render: true });
+
   }
 
   parseCourses = courses => {
     const lastSchedule = this.state.scheduleTimes[this.state.scheduleTimes.length - 1];
-    courses.map(course => {
+    courses.map((course, index) => {
       const courseName = course.courseID;
 
       const lectures = course.lectures[0];
@@ -131,30 +133,29 @@ class HomePage extends Component {
 
         const momentInterval = {
           start: momentLectureStart,
-          end: momentLectureEnd
+          end: momentLectureEnd,
+          value: courseName
         }
 
         lastSchedule.push(momentInterval);
       })
 
+      if (sections) {
+        sections.days.map(day => {
+          const sectionDayNumber = parseDate(day)
 
-      sections.days.map(day => {
-        const sectionDayNumber = parseDate(day)
+          const momentSectionStart = moment({day: sectionDayNumber, h: sections.time.start.hour, m: sections.time.start.minute});
+          const momentSectionEnd = moment({day: sectionDayNumber, h: sections.time.end.hour, m: sections.time.end.minute});
 
-        const momentSectionStart = moment({day: sectionDayNumber, h: sections.time.start.hour, m: sections.time.start.minute});
-        const momentSectionEnd = moment({day: sectionDayNumber, h: sections.time.end.hour, m: sections.time.end.minute});
+          const momentInterval = {
+            start: momentSectionStart,
+            end: momentSectionEnd,
+            value: courseName
+          }
 
-        const momentInterval = {
-          start: momentSectionStart,
-          end: momentSectionEnd
-        }
-
-        lastSchedule.push(momentInterval);
-      })
-
-      this.setState({
-        scheduleTimes: this.state.scheduleTimes.concat([lastSchedule])
-      })
+          lastSchedule.push(momentInterval);
+        })
+      }
     })
   }
 
@@ -166,17 +167,6 @@ class HomePage extends Component {
 
 
   render() {
-    console.log('Schedule times:')
-    this.state.scheduleTimes.map(schedule => {
-      this.state.scheduleTimes.map(schedule2 => {
-        if (schedule === schedule2) {
-          console.log('same?');
-          console.log(schedule)
-          console.log(schedule2)
-        }
-      })
-    })
-
     const { selectedCourses } = this.state;
     return (
       <Container className="flex-column">
@@ -211,7 +201,7 @@ class HomePage extends Component {
         <CalendarContainer
           displayCalendar={this.state.displaySchedules}
         >
-          {this.renderCalendars()}
+          {this.state.render ? this.renderCalendars() : null}
         </CalendarContainer>
 
       </Container>
@@ -223,6 +213,7 @@ class HomePage extends Component {
     return this.state.scheduleTimes.map((schedule, index) => {
       return (
         <WeekCalendarContainer key={`schedule${index}`}>
+          <div>{index}</div>
           <WeekCalendar
             key={`calendar${index}`}
             useModal={true}
@@ -241,12 +232,6 @@ class HomePage extends Component {
   }
 }
 
-
-// dates are may 13 to may 17
-// 13 = monday, 14 = tuesday, 15 = wednesday, 16 = thursday, 17 = friday
-
-
-
 const options = [
    'Morning Classes', 'Mid-Day Classes', 'Evening Classes', 'Highest Rate My Professor'
 ];
@@ -261,7 +246,7 @@ const parseDate = letterDay => {
       return 21;
     case 'W':
       return 22;
-    case 'Th':
+    case 'R':
       return 23;
     case 'F':
       return 24;
@@ -269,6 +254,33 @@ const parseDate = letterDay => {
 
   }
 
+  Object.compare = function (obj1, obj2) {
+  	//Loop through properties in object 1
+  	for (var p in obj1) {
+  		//Check property exists on both objects
+  		if (obj1.hasOwnProperty(p) !== obj2.hasOwnProperty(p)) return false;
+
+  		switch (typeof (obj1[p])) {
+  			//Deep compare objects
+  			case 'object':
+  				if (!Object.compare(obj1[p], obj2[p])) return false;
+  				break;
+  			//Compare function code
+  			case 'function':
+  				if (typeof (obj2[p]) == 'undefined' || (p != 'compare' && obj1[p].toString() != obj2[p].toString())) return false;
+  				break;
+  			//Compare values
+  			default:
+  				if (obj1[p] != obj2[p]) return false;
+  		}
+  	}
+
+  	//Check object 2 for any extra properties
+  	for (var p in obj2) {
+  		if (typeof (obj1[p]) == 'undefined') return false;
+  	}
+  	return true;
+  };
 
 }
 
