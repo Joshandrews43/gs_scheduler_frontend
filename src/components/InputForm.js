@@ -7,7 +7,7 @@ import * as courses from '../assets/fall2019.json';
 
 const InputFormContainer = styled.div`
   flex-direction: row;
-  display: ${props => props.displayForm ? 'flex' : 'none'}
+  display: flex;
   justify-content: space-between;
   max-width: 940px;
 `;
