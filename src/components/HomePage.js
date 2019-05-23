@@ -5,6 +5,8 @@ import SelectedCourses from './SelectedCourses';
 import Title from './Title';
 import GenerateButton from './GenerateButton.js';
 import DropdownInput from './DropdownInput.js';
+import EventComponent from './EventComponent.js';
+import FilterSelector from './Filters.js';
 import { postRequest, getRequest } from '../helpers/util.js';
 
 import '../styles/reset.css';
@@ -19,7 +21,6 @@ import moment from 'moment';
 import { extendMoment } from 'moment-range';
 
 const DropdownContainer = styled.div`
-  display: ${props => props.displayDropdown ? 'block' : 'none'}
   width: 200px;
 `;
 
@@ -33,9 +34,7 @@ const WeekCalendarContainer = styled.div`
   margin-bottom: 30px;
 `;
 
-const InputVisibleContainer = styled.div`
-  display: ${props => props.displayInputForm ? 'block' : 'none'}
-`;
+const InputVisibleContainer = styled.div``;
 
 const Container = styled.div`
   padding-top: 150px;
@@ -92,6 +91,12 @@ class HomePage extends Component {
       optional: [],
       filters: []
     }
+
+    this.setState({
+      scheduleTimes: [],
+      render: false,
+      displaySchedules: false
+    });
 
     postRequest('/generateSchedules', params)
     .then(res => {
@@ -180,6 +185,9 @@ class HomePage extends Component {
         />
 
         <MiddleContainer className="flex-row">
+          <FilterSelector
+            displayFilters={this.state.displaySchedules}
+          />
           <div className="flex-column flex-full-center">
             <DropdownContainer
               displayDropdown={!this.state.displaySchedules}
@@ -193,7 +201,6 @@ class HomePage extends Component {
             </DropdownContainer>
             <GenerateButton
               onClick={this.onGenerateClicked}
-              displayButton={!this.state.displaySchedules}
             />
           </div>
         </MiddleContainer>
@@ -224,6 +231,7 @@ class HomePage extends Component {
             firstDay = {moment().date(20)}
             startTime = {moment({h: 8, m: 0})}
             endTime = {moment({h: 22, m: 15})}
+            eventComponent={EventComponent}
             selectedIntervals={schedule}
           />
         </WeekCalendarContainer>

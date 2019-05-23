@@ -13,7 +13,6 @@ export const postRequest = async(url, params) => {
    .catch(err => {
      console.log(err);
    })
-   console.log(params)
    console.log(res);
    return res;
 }
@@ -30,5 +29,6 @@ export const getRequest = async(url) => {
      console.log(err);
    })
 
+   console.log(res);
    return res;
 }
