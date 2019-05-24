@@ -108,6 +108,7 @@ class HomePage extends Component {
     this.setState({
       scheduleTimes: [],
       render: false,
+      loading: true,
       displaySchedules: false
     });
 
@@ -129,7 +130,7 @@ class HomePage extends Component {
         this.parseCourses(courses);
       })
     });
-    this.setState({ displaySchedules: true, render: true });
+    this.setState({ displaySchedules: true, render: true, loading: false });
 
   }
 
@@ -203,6 +204,7 @@ class HomePage extends Component {
     this.setState({
       scheduleTimes: [],
       render: false,
+      loading: true,
       displaySchedules: false
     });
 
@@ -238,6 +240,7 @@ class HomePage extends Component {
             />
             <GenerateButton
               onClick={this.onGenerateClicked}
+              loading={this.state.loading}
             />
           </div>
         </MiddleContainer>

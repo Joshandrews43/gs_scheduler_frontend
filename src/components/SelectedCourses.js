@@ -7,6 +7,8 @@ const CoursesContainer = styled.div`
   width: 100%;
   max-width: 940px;
   flex-wrap: wrap;
+  position: relative;
+  left: 100px;
 `;
 
 const Course = styled.div`

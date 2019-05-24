@@ -5,10 +5,15 @@ import { getRequest } from '../helpers/util.js';
 
 
 const Container = styled.div`
-  display: ${props => props.displayFilters ? 'block' : 'none'}
+  display: ${props => props.displayFilters ? 'flex' : 'none'}
   width: 200px;
   border: 1px solid black;
   min-height: 325px;
+  justify-content: center;
+  flex-direction: column;
+  position: fixed;
+  left: 50px;
+  top: 125px;
 `;
 
 const FilterContainer = styled.div`
@@ -17,16 +22,17 @@ const FilterContainer = styled.div`
 
 const FilterType = styled.div`
   font-size: 22px;
+  margin-bottom: 10px;
 `;
 
-const ApplyFiltersButton = props => {
-  return (
-    <button onClick={props.applyFilters}>Apply Filters</button>
-  );
-}
+const ApplyFiltersButton = styled.button`
+  margin-top: 10px;
+  height: 30px;
+  margin-bottom: 10px;
+`;
 
 const Filter = props => (
-  <div className="flex-column" style={{minHeight: '50px'}}>
+  <div className="flex-column" style={{minHeight: '40px'}}>
     <input name={props.name} type="radio" key={props.name} value={props.value} onChange={props.onFilterSelect}/>
     <label htmlFor={props.name} style={{minWidth: '90px', maxWidth: '90px'}}>{props.value}</label>
   </div>
@@ -83,7 +89,7 @@ export default class FilterSelector extends React.Component {
     return (
       <Container displayFilters={displayFilters}>
         {this.renderFilters()}
-        <ApplyFiltersButton applyFilters={applyFilters}/>
+        <ApplyFiltersButton onClick={applyFilters}>Apply Filters</ApplyFiltersButton>
       </Container>
     );
   }
