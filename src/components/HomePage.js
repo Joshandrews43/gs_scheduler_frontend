@@ -113,10 +113,6 @@ class HomePage extends Component {
 
     postRequest('/generateSchedules', params)
     .then(res => {
-      console.log('generate schedules res:')
-      console.log(res);
-      console.log('generate schedules state before parse')
-      console.log(this.state);
       this.parseSchedulesFromResponse(res);
     })
     .catch(error => {
@@ -212,10 +208,6 @@ class HomePage extends Component {
 
     postRequest('/api/v1/schedule/generate/filter', params)
     .then(res => {
-      console.log('2 res:')
-      console.log(res);
-      console.log('2 state before parse')
-      console.log(this.state);
       this.parseSchedulesFromResponse(res)
     })
   }
