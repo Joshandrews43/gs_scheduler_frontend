@@ -60,7 +60,20 @@ class HomePage extends Component {
     selectedCourses: [],
     displaySchedules: false,
     scheduleTimes: [],
-    filter: '',
+    filters: [
+      {
+        type: 'Time',
+        option: null
+      },
+      {
+        type: 'Gaps',
+        option: null
+      },
+      {
+        type: 'Day',
+        option: null
+      }
+    ],
     render: false,
   }
 
@@ -100,23 +113,26 @@ class HomePage extends Component {
 
     postRequest('/generateSchedules', params)
     .then(res => {
-
-      // once we get a bunch of schedules, change this to iterate over the schedules.
-      res.schedules.map((schedule, index) => {
-        console.log('index:' + index)
-        const courses = schedule.courses;
-        this.setState({
-          scheduleTimes: this.state.scheduleTimes.concat([[]])
-        }, () => {
-          console.log('size of scheduleTimes: ' + this.state.scheduleTimes.length)
-          this.parseCourses(courses);
-        })
-      });
+      console.log('generate schedules res:')
+      console.log(res);
+      console.log('generate schedules state before parse')
+      console.log(this.state);
+      this.parseSchedulesFromResponse(res);
     })
     .catch(error => {
       console.log(error);
     })
+  }
 
+  parseSchedulesFromResponse = res => {
+    res.schedules.map((schedule, index) => {
+      const courses = schedule.courses;
+      this.setState({
+        scheduleTimes: this.state.scheduleTimes.concat([[]])
+      }, () => {
+        this.parseCourses(courses);
+      })
+    });
     this.setState({ displaySchedules: true, render: true });
 
   }
@@ -165,8 +181,42 @@ class HomePage extends Component {
   }
 
   onFilterSelect = (e) => {
+    const name = e.target.name;
+    const value = e.target.value;
+    this.state.filters.map((filter, i) => {
+      if (filter.type.toUpperCase() === String(name).toUpperCase()) {
+        const newObject = {
+          type: name,
+          option: value
+        }
+        this.setState({
+          filters: this.state.filters.slice(0, i).concat([newObject]).concat(this.state.filters.slice(i+1))
+        })
+      }
+    })
+  }
+
+  applyFilters = () => {
+    var params = {
+      filters: []
+    };
+    this.state.filters.map(filter => {
+      params.filters.push(filter);
+    })
+
     this.setState({
-      filter: e.target.value
+      scheduleTimes: [],
+      render: false,
+      displaySchedules: false
+    });
+
+    postRequest('/api/v1/schedule/generate/filter', params)
+    .then(res => {
+      console.log('2 res:')
+      console.log(res);
+      console.log('2 state before parse')
+      console.log(this.state);
+      this.parseSchedulesFromResponse(res)
     })
   }
 
@@ -187,18 +237,13 @@ class HomePage extends Component {
         <MiddleContainer className="flex-row">
           <FilterSelector
             displayFilters={this.state.displaySchedules}
+            onFilterSelect={this.onFilterSelect}
+            applyFilters={this.applyFilters}
           />
           <div className="flex-column flex-full-center">
             <DropdownContainer
               displayDropdown={!this.state.displaySchedules}
-            >
-              <DropdownInput
-                labelText="Select Filter (optional)"
-                options={options}
-                value={this.state.filter}
-                onChange={this.onFilterSelect}
-              />
-            </DropdownContainer>
+            />
             <GenerateButton
               onClick={this.onGenerateClicked}
             />
@@ -219,7 +264,7 @@ class HomePage extends Component {
     if (this.state.scheduleTimes[0] === []) return null;
     return this.state.scheduleTimes.map((schedule, index) => {
       return (
-        <WeekCalendarContainer key={`schedule${index}`}>
+        <WeekCalendarContainer key={`schedule${index + Math.random()}`}>
           <div>{index}</div>
           <WeekCalendar
             key={`calendar${index}`}
@@ -259,37 +304,9 @@ const parseDate = letterDay => {
     case 'F':
       return 24;
     default:
+      return;
 
   }
-
-  Object.compare = function (obj1, obj2) {
-  	//Loop through properties in object 1
-  	for (var p in obj1) {
-  		//Check property exists on both objects
-  		if (obj1.hasOwnProperty(p) !== obj2.hasOwnProperty(p)) return false;
-
-  		switch (typeof (obj1[p])) {
-  			//Deep compare objects
-  			case 'object':
-  				if (!Object.compare(obj1[p], obj2[p])) return false;
-  				break;
-  			//Compare function code
-  			case 'function':
-  				if (typeof (obj2[p]) == 'undefined' || (p != 'compare' && obj1[p].toString() != obj2[p].toString())) return false;
-  				break;
-  			//Compare values
-  			default:
-  				if (obj1[p] != obj2[p]) return false;
-  		}
-  	}
-
-  	//Check object 2 for any extra properties
-  	for (var p in obj2) {
-  		if (typeof (obj1[p]) == 'undefined') return false;
-  	}
-  	return true;
-  };
-
 }
 
 export default HomePage;
