@@ -80,16 +80,26 @@ export default class FilterSelector extends React.Component {
     })
   }
 
+  clearRadioButtons = () => {
+    this.setState({
+      filters: [],
+      selectedFilters: []
+    })
+    this.populateFilters();
+  }
+
   render() {
     const {
       displayFilters,
-      applyFilters
+      applyFilters,
+      clearFilters
     } = this.props;
 
     return (
       <Container displayFilters={displayFilters}>
         {this.renderFilters()}
         <ApplyFiltersButton onClick={applyFilters}>Apply Filters</ApplyFiltersButton>
+        <ApplyFiltersButton onClick={() => {clearFilters(); this.clearRadioButtons()}}>Clear Filters</ApplyFiltersButton>
       </Container>
     );
   }

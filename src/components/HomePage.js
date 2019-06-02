@@ -37,7 +37,7 @@ const WeekCalendarContainer = styled.div`
 const InputVisibleContainer = styled.div``;
 
 const Container = styled.div`
-  padding-top: 150px;
+  padding-top: 100px;
   justify-content: center;
   align-items: center;
   position: relative;
@@ -214,11 +214,37 @@ class HomePage extends Component {
     })
   }
 
+  clearFilters = () => {
+    this.setState({
+      scheduleTimes: [],
+      render: false,
+      loading: true,
+      displaySchedules: false,
+      filters: [
+        {
+          type: 'Time',
+          option: null
+        },
+        {
+          type: 'Gaps',
+          option: null
+        },
+        {
+          type: 'Day',
+          option: null
+        }
+      ]
+    });
+
+    this.onGenerateClicked();
+  }
+
 
   render() {
     const { selectedCourses } = this.state;
     return (
       <Container className="flex-column">
+        <Title />
         <InputForm
           addCourse={this.addCourse}
           displayForm={!this.state.displaySchedules}
@@ -227,12 +253,12 @@ class HomePage extends Component {
           courses={selectedCourses}
           deleteCourse={this.deleteCourse}
         />
-
         <MiddleContainer className="flex-row">
           <FilterSelector
             displayFilters={this.state.displaySchedules}
             onFilterSelect={this.onFilterSelect}
             applyFilters={this.applyFilters}
+            clearFilters={this.clearFilters}
           />
           <div className="flex-column flex-full-center">
             <DropdownContainer
@@ -256,7 +282,10 @@ class HomePage extends Component {
   }
 
   renderCalendars = () => {
-    if (this.state.scheduleTimes[0] === []) return null;
+    console.log(this.state.scheduleTimes.length)
+    if (this.state.scheduleTimes.length === 0) {
+      return <div style={{textAlign: 'center', marginTop: '100px', fontSize: '26px'}}>No schedules possible for current configuration</div>
+    }
     return this.state.scheduleTimes.map((schedule, index) => {
       return (
         <WeekCalendarContainer key={`schedule${index + Math.random()}`}>
@@ -268,7 +297,7 @@ class HomePage extends Component {
             numberOfDays={5}
             dayFormat="dd"
             scaleUnit={30}
-            firstDay = {moment().date(20)}
+            firstDay = {moment().date(3)}
             startTime = {moment({h: 8, m: 0})}
             endTime = {moment({h: 22, m: 15})}
             eventComponent={EventComponent}
@@ -289,15 +318,15 @@ const defaultOption = options[0];
 const parseDate = letterDay => {
   switch (letterDay) {
     case 'M':
-      return 20;
+      return 3;
     case 'T':
-      return 21;
+      return 4;
     case 'W':
-      return 22;
+      return 5;
     case 'R':
-      return 23;
+      return 6;
     case 'F':
-      return 24;
+      return 7;
     default:
       return;
 

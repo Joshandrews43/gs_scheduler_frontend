@@ -8,16 +8,14 @@ const TitleStyle = styled.div`
     text-shadow: 0 0 5px #f4e242, 0 0 10px #f4e242,
              0 0 20px #f4e242, 0 0 30px #f4e242,
              0 0 40px #f4e242;
+    font-size: 26px;
     margin-bottom: 50px;
 `;
-class Title extends Component{
-    render(){
-        return(
-            <TitleStyle>
-                <h1>GS Scheduler</h1>
-            </TitleStyle>
-        ) 
-    }
-}
 
-export default Title;
+export default function Title() {
+  return (
+  <TitleStyle>
+    <h1>GauchoTime</h1>
+  </TitleStyle>
+)
+}
