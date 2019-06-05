@@ -4,7 +4,7 @@ import styled from 'styled-components';
 const Event = styled.div`
   position: relative;
   overflow: hidden;
-  width: 114px;
+  width: 110px;
   height: 98%;
   padding: 5px;
   color: white;

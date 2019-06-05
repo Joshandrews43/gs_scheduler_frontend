@@ -102,7 +102,7 @@ class HomePage extends Component {
     const params = {
       mandatory: selectedCourses,
       optional: [],
-      filters: []
+      filters: this.state.filters
     }
 
     this.setState({
@@ -111,9 +111,10 @@ class HomePage extends Component {
       loading: true,
       displaySchedules: false
     });
-
+    console.log(selectedCourses)
     postRequest('/generateSchedules', params)
     .then(res => {
+      console.log(res)
       this.parseSchedulesFromResponse(res);
     })
     .catch(error => {
@@ -194,24 +195,8 @@ class HomePage extends Component {
   }
 
   applyFilters = () => {
-    var params = {
-      filters: []
-    };
-    this.state.filters.map(filter => {
-      params.filters.push(filter);
-    })
 
-    this.setState({
-      scheduleTimes: [],
-      render: false,
-      loading: true,
-      displaySchedules: false
-    });
-
-    postRequest('/api/v1/schedule/generate/filter', params)
-    .then(res => {
-      this.parseSchedulesFromResponse(res)
-    })
+    this.onGenerateClicked()
   }
 
   clearFilters = () => {
